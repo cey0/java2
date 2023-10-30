@@ -325,20 +325,33 @@ public class editsiswa extends javax.swing.JFrame {
     }//GEN-LAST:event_NnamaActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        crudsiswa cs = new crudsiswa();
-        cs.show();
-        this.dispose();
+        // Kembali ke halaman sebelumnya (tanpa menginstansiasi ulang)
+    this.dispose(); // Tutup halaman edit
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+      // Konfirmasi penghapusan
+    int confirm = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin menghapus data tersebut?", "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+    if (confirm == 0) {
         Connection conn = koneksi.getConnection();
-        int confirm = JOptionPane.showConfirmDialog(null, "Apakah anda yakin ingin menghapus data tersebut?", "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (confirm == 0) {
-            try {
-                java.sql.PreparedStatement stmt = conn.prepareStatement("delete from siswa where nisn ='" + selectedIdTransaksi + "'");
-                stmt.executeUpdate();
+
+        // Ambil nilai nisn dari kolom terpilih di tabel
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih data yang akan dihapus.");
+            return;
+        }
+        String nisn = (String) tbl.getValueAt(selectedRow, 0);
+
+        try {
+            String query = "DELETE FROM siswa WHERE nisn=?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, nisn);
+            int rowsDeleted = stmt.executeUpdate();
+
+            if (rowsDeleted > 0) {
                 JOptionPane.showMessageDialog(null, "Data berhasil dihapus", "Pesan", JOptionPane.INFORMATION_MESSAGE);
                 tampildata();
                 Nnisn.setText("");
@@ -348,11 +361,13 @@ public class editsiswa extends javax.swing.JFrame {
                 alamat.setText("");
                 notelp.setText("");
                 idspp.setSelectedItem("");
-                
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Data gagal di hapus" + e.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Data gagal dihapus", "Pesan", JOptionPane.ERROR_MESSAGE);
             }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Data gagal dihapus: " + e.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
         }
+    }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -384,15 +399,14 @@ public class editsiswa extends javax.swing.JFrame {
     }//GEN-LAST:event_tableMouseEntered
 private String selectedIdTransaksi;
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
-        // TODO add your handling code here:
-         int baris = table.getSelectedRow();
-         Nnisn.setText( tbl.getValueAt(baris, 0).toString());
-         Nnis.setText(tbl.getValueAt(baris, 1).toString());
-         Nnama.setText(tbl.getValueAt(baris,2).toString());
-         idkelas.setSelectedItem(tbl.getValueAt(baris, 3).toString());
-         alamat.setText(tbl.getValueAt(baris,4).toString());
-         notelp.setText(tbl.getValueAt(baris,5).toString());
-         idspp.setSelectedItem(tbl.getValueAt(baris, 6).toString());
+        int baris = table.getSelectedRow();
+    Nnisn.setText(tbl.getValueAt(baris, 0).toString());
+    Nnis.setText(tbl.getValueAt(baris, 1).toString());
+    Nnama.setText(tbl.getValueAt(baris, 2).toString());
+    idkelas.setSelectedItem(tbl.getValueAt(baris, 3).toString());
+    alamat.setText(tbl.getValueAt(baris, 4).toString());
+    notelp.setText(tbl.getValueAt(baris, 5).toString());
+    idspp.setSelectedItem(tbl.getValueAt(baris, 6).toString());
     }//GEN-LAST:event_tableMouseClicked
 
     /**
