@@ -53,12 +53,6 @@ public class login extends javax.swing.JFrame {
                  util role = util.getInstance();
                     role.setRole("petugas");
                  this.dispose();
-             }else if(rs.getString("role").equals("siswa")){
-                 siswa fi = new siswa();
-                 fi.show();
-                 util role = util.getInstance();
-                    role.setRole("siswa");
-                 this.dispose();
              }
          }else{
              JOptionPane.showMessageDialog(null, "Maaf password atau username anda salah");

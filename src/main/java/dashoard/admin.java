@@ -5,6 +5,7 @@
 package dashoard;
 import login.login;
 import procces.viewAdmin;
+import CRUD.pilihcrud;
 
 /**
  *
@@ -132,6 +133,10 @@ public class admin extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
+        pilihcrud on = new pilihcrud();
+        on.show();
+        this.dispose();
+        
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
