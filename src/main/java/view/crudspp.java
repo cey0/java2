@@ -4,6 +4,14 @@
  */
 package view;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
+import koneksi.koneksi;
+import create.createspp;
+
 /**
  *
  * @author admin
@@ -13,8 +21,42 @@ public class crudspp extends javax.swing.JFrame {
     /**
      * Creates new form crudspp
      */
+    Connection c;
+    Statement st;
+    String sql;
+    ResultSet rs;
+    private DefaultTableModel tbl;
     public crudspp() {
         initComponents();
+        tampildata();
+    }
+    
+    public void tampildata(){
+        int no = 1;
+        tbl = new DefaultTableModel();
+         tbl.addColumn("id_spp");
+         tbl.addColumn("tahun");
+         tbl.addColumn("nominal");
+         table.setModel(tbl);
+         c = koneksi.getConnection();
+         try{
+              c = koneksi.getConnection();
+             st = c.createStatement();
+             sql = "SELECT * FROM data_spp";
+             rs = st.executeQuery(sql);
+             
+             while(rs.next()){
+             tbl.addRow(new Object[]{
+                rs.getString("id_spp"),
+                rs.getString("tahun"),
+                rs.getString("nominal"),
+                
+             
+             });
+             }
+         }catch(SQLException e){
+             System.out.println(e.getMessage());
+         }
     }
 
     /**
@@ -27,7 +69,7 @@ public class crudspp extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -35,7 +77,7 @@ public class crudspp extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -54,7 +96,7 @@ public class crudspp extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
 
         jButton1.setText("edit");
 
@@ -120,6 +162,9 @@ public class crudspp extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        createspp cs = new createspp();
+        cs.show();
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -163,6 +208,6 @@ public class crudspp extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

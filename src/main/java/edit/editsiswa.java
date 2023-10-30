@@ -312,71 +312,26 @@ public class editsiswa extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void notelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notelpActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_notelpActionPerformed
-
-    private void NnisnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NnisnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NnisnActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // Kembali ke halaman sebelumnya (tanpa menginstansiasi ulang)
+        crudsiswa cs = new crudsiswa();
+        cs.show();
+        this.dispose(); // Tutup halaman edit
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void NnamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NnamaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_NnamaActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // Kembali ke halaman sebelumnya (tanpa menginstansiasi ulang)
-        crudsiswa cs = new crudsiswa();
-        cs.show();
-    this.dispose(); // Tutup halaman edit
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void NnisnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NnisnActionPerformed
         // TODO add your handling code here:
-      // Konfirmasi penghapusan
-    int confirm = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin menghapus data tersebut?", "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-    if (confirm == 0) {
-        Connection conn = koneksi.getConnection();
-
-        // Ambil nilai nisn dari kolom terpilih di tabel
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Pilih data yang akan dihapus.");
-            return;
-        }
-        String nisn = (String) tbl.getValueAt(selectedRow, 0);
-
-        try {
-            String query = "DELETE FROM siswa WHERE nisn=?";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, nisn);
-            int rowsDeleted = stmt.executeUpdate();
-
-            if (rowsDeleted > 0) {
-                JOptionPane.showMessageDialog(null, "Data berhasil dihapus", "Pesan", JOptionPane.INFORMATION_MESSAGE);
-                tampildata();
-                Nnisn.setText("");
-                Nnis.setText("");
-                Nnama.setText("");
-                idkelas.setSelectedItem("");
-                alamat.setText("");
-                notelp.setText("");
-                idspp.setSelectedItem("");
-            } else {
-                JOptionPane.showMessageDialog(null, "Data gagal dihapus", "Pesan", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Data gagal dihapus: " + e.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_NnisnActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         try{
-           c = koneksi.getConnection();
-            
+            c = koneksi.getConnection();
+
             String sql = "UPDATE siswa SET nisn=?, nis=?, nama=?, id_kelas=?,alamat=?,no_telp=?,id_spp=?";
             PreparedStatement st = c.prepareStatement(sql);
             st.setString(1, Nnisn.getText());
@@ -392,25 +347,69 @@ public class editsiswa extends javax.swing.JFrame {
         }catch(SQLException e) {
             System.out.println(e.getMessage());
         }
-        
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void notelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notelpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_notelpActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        // Konfirmasi penghapusan
+        int confirm = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin menghapus data tersebut?", "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (confirm == 0) {
+            Connection conn = koneksi.getConnection();
+
+            // Ambil nilai nisn dari kolom terpilih di tabel
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Pilih data yang akan dihapus.");
+                return;
+            }
+            String nisn = (String) tbl.getValueAt(selectedRow, 0);
+
+            try {
+                String query = "DELETE FROM siswa WHERE nisn=?";
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, nisn);
+                int rowsDeleted = stmt.executeUpdate();
+
+                if (rowsDeleted > 0) {
+                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                    tampildata();
+                    Nnisn.setText("");
+                    Nnis.setText("");
+                    Nnama.setText("");
+                    idkelas.setSelectedItem("");
+                    alamat.setText("");
+                    notelp.setText("");
+                    idspp.setSelectedItem("");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Data gagal dihapus", "Pesan", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Data gagal dihapus: " + e.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     private void tableMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseEntered
         // TODO add your handling code here:
     }//GEN-LAST:event_tableMouseEntered
-private String selectedIdTransaksi;
+
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         int baris = table.getSelectedRow();
-    Nnisn.setText(tbl.getValueAt(baris, 0).toString());
-    Nnis.setText(tbl.getValueAt(baris, 1).toString());
-    Nnama.setText(tbl.getValueAt(baris, 2).toString());
-    idkelas.setSelectedItem(tbl.getValueAt(baris, 3).toString());
-    alamat.setText(tbl.getValueAt(baris, 4).toString());
-    notelp.setText(tbl.getValueAt(baris, 5).toString());
-    idspp.setSelectedItem(tbl.getValueAt(baris, 6).toString());
+        Nnisn.setText(tbl.getValueAt(baris, 0).toString());
+        Nnis.setText(tbl.getValueAt(baris, 1).toString());
+        Nnama.setText(tbl.getValueAt(baris, 2).toString());
+        idkelas.setSelectedItem(tbl.getValueAt(baris, 3).toString());
+        alamat.setText(tbl.getValueAt(baris, 4).toString());
+        notelp.setText(tbl.getValueAt(baris, 5).toString());
+        idspp.setSelectedItem(tbl.getValueAt(baris, 6).toString());
     }//GEN-LAST:event_tableMouseClicked
-
+private String selectedIdTransaksi;
     /**
      * @param args the command line arguments
      */
