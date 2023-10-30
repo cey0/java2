@@ -101,6 +101,11 @@ public class editspp extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table);
 
         nominal.addActionListener(new java.awt.event.ActionListener() {
@@ -207,26 +212,9 @@ public class editspp extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        try{
+       try {
             c = koneksi.getConnection();
-
-            String sql = "UPDATE siswa SET tahun=?, nominal=?";
-            PreparedStatement st = c.prepareStatement(sql);
-            st.setString(2, tahun.getText());
-            st.setString(3, nominal.getText());
-            st.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Data berhasil diubah", "Pesan", JOptionPane.INFORMATION_MESSAGE);
-            tampildata();
-        }catch(SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        try {
-            c = koneksi.getConnection();
-            String sql = "INSERT INTO data_spp (tahun, nominal) VALUES (?, ?)";
+            String sql = "UPDATE data_spp SET tahun=?, nominal=?";
             PreparedStatement st = c.prepareStatement(sql);
             st.setInt(1, Integer.parseInt(tahun.getText()));
             st.setInt(2, Integer.parseInt(nominal.getText()));
@@ -242,7 +230,21 @@ public class editspp extends javax.swing.JFrame {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        // TODO add your handling code here:
+        int baris = table.getSelectedRow();
+        tahun.setText(tbl.getValueAt(baris, 1).toString());
+        nominal.setText(tbl.getValueAt(baris, 2).toString());
+        
+        
+    }//GEN-LAST:event_tableMouseClicked
 
     /**
      * @param args the command line arguments
