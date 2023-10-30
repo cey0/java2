@@ -11,6 +11,7 @@ import koneksi.koneksi;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import create.createsiswa;
 
 
 /**
@@ -30,6 +31,7 @@ public class crudsiswa extends javax.swing.JFrame {
     public crudsiswa() {
         initComponents();
         this.tampildata();
+       
     }
     public void tampildata(){
         int no = 1;
@@ -42,8 +44,9 @@ public class crudsiswa extends javax.swing.JFrame {
          tbl.addColumn("no_telp");
          tbl.addColumn("id_spp");
          table.setModel(tbl);
-         Connection conn = koneksi.getConnection();
+         c = koneksi.getConnection();
          try{
+              c = koneksi.getConnection();
              st = c.createStatement();
              sql = "SELECT * FROM siswa";
              rs = st.executeQuery(sql);
@@ -53,10 +56,10 @@ public class crudsiswa extends javax.swing.JFrame {
                 rs.getString("nisn"),
                 rs.getString("nis"),
                 rs.getString("nama"),
-                rs.getString("id_kelas"),
+                rs.getInt("id_kelas"),
                 rs.getString("alamat"),
                 rs.getString("no_telp"),
-                rs.getString("id_spp"),
+                rs.getInt("id_spp"),
              
              });
              }
@@ -167,6 +170,10 @@ public class crudsiswa extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        createsiswa cs = new createsiswa();
+        cs.show();
+        this.dispose();
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

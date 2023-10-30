@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package CRUD;
+import view.crudsiswa;
 
 /**
  *
@@ -33,6 +34,7 @@ public class pilihcrud extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(500, 500));
         getContentPane().setLayout(null);
 
         jButton5.setBackground(new java.awt.Color(0, 0, 255));
@@ -81,9 +83,9 @@ public class pilihcrud extends javax.swing.JFrame {
 
         jButton1.setText("dashboard");
         getContentPane().add(jButton1);
-        jButton1.setBounds(10, 0, 86, 22);
+        jButton1.setBounds(10, 0, 93, 23);
 
-        pack();
+        setBounds(0, 0, 603, 249);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -100,6 +102,9 @@ public class pilihcrud extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
+        crudsiswa cs = new crudsiswa();
+        cs.show();
+        this.dispose();
     }//GEN-LAST:event_jButton8ActionPerformed
 
     /**
