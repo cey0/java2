@@ -35,10 +35,11 @@ public class login extends javax.swing.JFrame {
     }
     public void cek(){
         try{
+            
          st = c.createStatement();
          sql = "SELECT * FROM user where username = '"+username.getText()+"' and password = '"+pass.getText()+"'";
          rs = st.executeQuery(sql);
-        
+         System.out.println("Before rs.next()");
          if(rs.next()){
              if(rs.getString("role").equals("admin")){
                  admin fo =new admin();
@@ -55,6 +56,7 @@ public class login extends javax.swing.JFrame {
                  this.dispose();
              }
          }else{
+              System.out.println("No data retrieved from the database.");
              JOptionPane.showMessageDialog(null, "Maaf password atau username anda salah");
                 username.setText("");
                 pass.setText("");
@@ -62,6 +64,8 @@ public class login extends javax.swing.JFrame {
          }
         }catch(SQLException e){
             JOptionPane.showMessageDialog(null, e);
+             e.printStackTrace();
+        JOptionPane.showMessageDialog(null, e);
    
     }
 

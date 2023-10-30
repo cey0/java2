@@ -34,40 +34,54 @@ public class createsiswa extends javax.swing.JFrame {
             this.combokelas(); // Corrected method name
             this.combospp();   // Corrected method name
 }
-    public void tampildata(){
-        int no = 1;
-        tbl = new DefaultTableModel();
-         tbl.addColumn("nisn");
-         tbl.addColumn("nis");
-         tbl.addColumn("nama");
-         tbl.addColumn("id_kelas");
-         tbl.addColumn("alamat");
-         tbl.addColumn("no_telp");
-         tbl.addColumn("id_spp");
-         table.setModel(tbl);
-         c = koneksi.getConnection();
-         try{
-              c = koneksi.getConnection();
-             st = c.createStatement();
-             sql = "SELECT * FROM siswa";
-             rs = st.executeQuery(sql);
-             
-             while(rs.next()){
-             tbl.addRow(new Object[]{
+    public void tampildata() {
+    int no = 1;
+    tbl = new DefaultTableModel();
+    tbl.addColumn("nisn");
+    tbl.addColumn("nis");
+    tbl.addColumn("nama");
+    tbl.addColumn("id_kelas");
+    tbl.addColumn("alamat");
+    tbl.addColumn("no_telp");
+    tbl.addColumn("id_spp");
+    table.setModel(tbl);
+    
+    try {
+        c = koneksi.getConnection();
+        st = c.createStatement();
+        sql = "SELECT * FROM siswa";
+        rs = st.executeQuery(sql);
+
+        while (rs.next()) {
+            tbl.addRow(new Object[] {
                 rs.getString("nisn"),
                 rs.getString("nis"),
                 rs.getString("nama"),
                 rs.getInt("id_kelas"),
                 rs.getString("alamat"),
                 rs.getString("no_telp"),
-                rs.getInt("id_spp"),
-             
-             });
-             }
-         }catch(SQLException e){
-             System.out.println(e.getMessage());
-         }
+                rs.getInt("id_spp")
+            });
+        }
+    } catch (SQLException e) {
+        System.out.println("SQLException: " + e.getMessage());
+    } finally {
+        // Close resources in a finally block
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (st != null) {
+                st.close();
+            }
+            if (c != null) {
+                c.close();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error closing resources: " + e.getMessage());
+        }
     }
+}
     public void combokelas() {
     idkelas.removeAllItems(); // Clear existing items in the combo box
     try {
