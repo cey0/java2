@@ -212,7 +212,7 @@ public class createspp extends javax.swing.JFrame {
             String sql = "INSERT INTO data_spp (tahun, nominal) VALUES (?, ?)";
             PreparedStatement st = c.prepareStatement(sql);
            st.setInt(1, Integer.parseInt(tahun.getText()));
-            st.setInt(2, Integer.parseInt(tahun.getText()));
+            st.setInt(2, Integer.parseInt(nominal.getText()));
 
             int rowsInserted = st.executeUpdate();
 

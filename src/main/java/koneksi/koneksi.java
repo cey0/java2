@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public class koneksi {
     public static Connection getConnection() {
         Connection conn = null;
-        String url = "jdbc:mysql://localhost:3307/spp";
+        String url = "jdbc:mysql://localhost:3306/spp";
         String user = "root";
         String password = "";
         try {

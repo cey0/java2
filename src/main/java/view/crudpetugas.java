@@ -3,6 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package view;
+import CRUD.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import edit.editpetugas;
+import create.createpetugas;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
+import koneksi.koneksi;
 
 
 /**
@@ -14,8 +23,46 @@ public class crudpetugas extends javax.swing.JFrame {
     /**
      * Creates new form crudpetugas
      */
+    Connection c;
+    Statement st;
+    String sql;
+    ResultSet rs;
+    private DefaultTableModel tbl;
     public crudpetugas() {
         initComponents();
+        tampildata();
+    }
+    public void tampildata(){
+        int no = 1;
+        tbl = new DefaultTableModel();
+        tbl.addColumn("id_user");
+        tbl.addColumn("username");
+        tbl.addColumn("password");
+        tbl.addColumn("nama_petugas");
+        tbl.addColumn("role");
+        table.setModel(tbl);
+        c = koneksi.getConnection();
+        try{
+            c = koneksi.getConnection();
+             st = c.createStatement();
+             sql = "SELECT * FROM user";
+             rs = st.executeQuery(sql);
+             
+             while(rs.next()){
+             tbl.addRow(new Object[]{
+                rs.getString("id_user"),
+                rs.getString("username"),
+                rs.getString("nama_petugas"),
+                rs.getString("role"),
+                
+             
+             });
+             }
+            
+        }catch(SQLException e){
+             System.out.println(e.getMessage());
+            
+        }
     }
 
     /**
@@ -28,15 +75,16 @@ public class crudpetugas extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -44,7 +92,7 @@ public class crudpetugas extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "id_petugas", "nama petugas", "username", "password", "role"
+                "id_user", "nama petugas", "username", "password", "role"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -55,9 +103,14 @@ public class crudpetugas extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
 
         jButton1.setText("edit");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("create");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -67,15 +120,29 @@ public class crudpetugas extends javax.swing.JFrame {
         });
 
         jButton3.setText("delete");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("data petugas");
+
+        jButton4.setText("<");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(266, 266, 266)
+                .addGap(19, 19, 19)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(162, 162, 162)
                 .addComponent(jLabel1)
                 .addContainerGap(261, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -97,9 +164,14 @@ public class crudpetugas extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(380, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(jButton4)))
+                .addContainerGap(365, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(21, 21, 21)
@@ -121,7 +193,31 @@ public class crudpetugas extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        createpetugas cp = new createpetugas();
+        cp.show();
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        pilihcrud am = new pilihcrud();
+        am.show();
+        this.dispose();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        editpetugas ep = new editpetugas();
+        ep.show();
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        editpetugas ep = new editpetugas();
+        ep.show();
+        this.dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -162,8 +258,9 @@ public class crudpetugas extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

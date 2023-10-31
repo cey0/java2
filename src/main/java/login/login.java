@@ -34,39 +34,38 @@ public class login extends javax.swing.JFrame {
         c = koneksi.getConnection();
     }
     public void cek(){
-        try{
-            
-         st = c.createStatement();
-         sql = "SELECT * FROM user where username = '"+username.getText()+"' and password = '"+pass.getText()+"'";
-         rs = st.executeQuery(sql);
-         System.out.println("Before rs.next()");
-         if(rs.next()){
-             if(rs.getString("role").equals("admin")){
-                 admin fo =new admin();
-                 fo.show();
-                 util role = util.getInstance();
-                    role.setRole("admin"); // Atau setel peran pengguna yang sesuai
+        try {
+        st = c.createStatement();
+        sql = "SELECT * FROM user where username = '" + username.getText() + "' and password = '" + pass.getText() + "'";
+        rs = st.executeQuery(sql);
 
-                 this.dispose();
-             }else if(rs.getString("role").equals("petugas")){
-                 petugas fa = new petugas();
-                 fa.show();
-                 util role = util.getInstance();
-                    role.setRole("petugas");
-                 this.dispose();
-             }
-         }else{
-              System.out.println("No data retrieved from the database.");
-             JOptionPane.showMessageDialog(null, "Maaf password atau username anda salah");
-                username.setText("");
-                pass.setText("");
-                username.requestFocus();
-         }
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e);
-             e.printStackTrace();
+        if (rs.next()) {
+            if (rs.getString("role").equals("admin")) {
+                admin fo = new admin();
+                fo.show();
+                util role = util.getInstance();
+                role.setRole("admin");
+                this.dispose();
+            } else if (rs.getString("role").equals("petugas")) {
+                petugas fa = new petugas();
+                fa.show();
+                util role = util.getInstance();
+                role.setRole("petugas");
+                this.dispose();
+            }
+            
+            // Show a JOptionPane with "Login berhasil" message
+            JOptionPane.showMessageDialog(null, "Login berhasil");
+        } else {
+            JOptionPane.showMessageDialog(null, "Maaf password atau username anda salah");
+            username.setText("");
+            pass.setText("");
+            username.requestFocus();
+        }
+    } catch (SQLException e) {
         JOptionPane.showMessageDialog(null, e);
-   
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, e);
     }
 
     }

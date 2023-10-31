@@ -213,23 +213,35 @@ public class editspp extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
        try {
-            c = koneksi.getConnection();
-            String sql = "UPDATE data_spp SET tahun=?, nominal=?";
-            PreparedStatement st = c.prepareStatement(sql);
+        c = koneksi.getConnection();
+        String sql = "UPDATE kelas SET tahun=?, nominal=? WHERE id_spp=?";
+        PreparedStatement st = c.prepareStatement(sql);
+        
+        // Get the selected row's index
+        int selectedRow = table.getSelectedRow();
+        
+        if (selectedRow != -1) {
+            // Get the 'id_spp' value from the selected row
+            int id_spp = Integer.parseInt(tbl.getValueAt(selectedRow, 0).toString());
+
             st.setInt(1, Integer.parseInt(tahun.getText()));
             st.setInt(2, Integer.parseInt(nominal.getText()));
+            st.setInt(3, id_spp); // Use the 'id_spp' from the selected row
 
-            int rowsInserted = st.executeUpdate();
+            int rowsUpdated = st.executeUpdate();
 
-            if (rowsInserted > 0) {
-                System.out.println("A new row has been inserted.");
+            if (rowsUpdated > 0) {
+                System.out.println("Row updated successfully.");
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 model.setRowCount(0);
                 tampildata();
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih data yang akan diupdate.");
         }
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
