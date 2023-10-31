@@ -234,7 +234,40 @@ public class editspp extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        
+        // Get the selected row
+    // Konfirmasi penghapusan
+        int confirm = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin menghapus data tersebut?", "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (confirm == 0) {
+            Connection conn = koneksi.getConnection();
+
+            // Ambil nilai nisn dari kolom terpilih di tabel
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Pilih data yang akan dihapus.");
+                return;
+            }
+            String nisn = (String) tbl.getValueAt(selectedRow, 0);
+
+            try {
+                String query = "DELETE FROM data_spp WHERE id_spp=?";
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, nisn);
+                int rowsDeleted = stmt.executeUpdate();
+
+                if (rowsDeleted > 0) {
+                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+                    tampildata();
+                    tahun.setText("");
+                    nominal.setText("");
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "Data gagal dihapus", "Pesan", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Data gagal dihapus: " + e.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked

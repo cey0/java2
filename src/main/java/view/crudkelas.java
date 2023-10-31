@@ -4,6 +4,13 @@
  */
 package view;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
+import koneksi.koneksi;
+
 /**
  *
  * @author nadra
@@ -13,8 +20,42 @@ public class crudkelas extends javax.swing.JFrame {
     /**
      * Creates new form crudkelas
      */
+    Connection c;
+    Statement st;
+    String sql;
+    ResultSet rs;
+    private DefaultTableModel tbl;
     public crudkelas() {
         initComponents();
+        tampildata();
+    }
+    
+    public void tampildata(){
+        int no = 1;
+        tbl = new DefaultTableModel();
+         tbl.addColumn("id_kelas");
+         tbl.addColumn("nama_kelas");
+         tbl.addColumn("kkompetensi_keahlian");
+         jTable1.setModel(tbl);
+         c = koneksi.getConnection();
+         try{
+              c = koneksi.getConnection();
+             st = c.createStatement();
+             sql = "SELECT * FROM kelas";
+             rs = st.executeQuery(sql);
+             
+             while(rs.next()){
+             tbl.addRow(new Object[]{
+                rs.getString("id_kelas"),
+                rs.getString("nama_kelas"),
+                rs.getString("kompetensi_keahlian"),
+                
+             
+             });
+             }
+         }catch(SQLException e){
+             System.out.println(e.getMessage());
+         }
     }
 
     /**
@@ -32,6 +73,7 @@ public class crudkelas extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,6 +111,8 @@ public class crudkelas extends javax.swing.JFrame {
 
         jButton3.setText("delete");
 
+        jButton4.setText("<");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -83,7 +127,9 @@ public class crudkelas extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(57, 57, 57))
             .addGroup(layout.createSequentialGroup()
-                .addGap(229, 229, 229)
+                .addGap(22, 22, 22)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(124, 124, 124)
                 .addComponent(jLabel1)
                 .addContainerGap(416, Short.MAX_VALUE))
         );
@@ -92,19 +138,19 @@ public class crudkelas extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(28, 28, 28)
-                        .addComponent(jButton3)
-                        .addGap(28, 28, 28)
-                        .addComponent(jButton2)
-                        .addGap(0, 195, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(28, 28, 28)
+                .addComponent(jButton3)
+                .addGap(28, 28, 28)
+                .addComponent(jButton2)
+                .addGap(0, 292, Short.MAX_VALUE))
         );
 
         pack();
@@ -153,6 +199,7 @@ public class crudkelas extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

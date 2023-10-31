@@ -14,6 +14,7 @@ import java.sql.Statement;
 import create.createsiswa;
 import edit.editsiswa;
 import dashoard.admin;
+import CRUD.pilihcrud;
 
 
 /**
@@ -204,7 +205,7 @@ public class crudsiswa extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-      admin am = new admin();
+      pilihcrud am = new pilihcrud();
       am.show();
       this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
