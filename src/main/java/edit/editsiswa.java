@@ -127,7 +127,7 @@ public class editsiswa extends javax.swing.JFrame {
         alamat = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
+        delete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -210,10 +210,10 @@ public class editsiswa extends javax.swing.JFrame {
 
         jLabel4.setText("id_kelas");
 
-        jButton4.setText("delete");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        delete.setText("delete");
+        delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                deleteActionPerformed(evt);
             }
         });
 
@@ -259,7 +259,7 @@ public class editsiswa extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jButton1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton4)
+                                .addComponent(delete)
                                 .addGap(17, 17, 17))))))
         );
         layout.setVerticalGroup(
@@ -270,7 +270,7 @@ public class editsiswa extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1)
-                            .addComponent(jButton4))
+                            .addComponent(delete))
                         .addGap(18, 18, 18))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(11, 11, 11)
@@ -329,71 +329,54 @@ public class editsiswa extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        try{
-            c = koneksi.getConnection();
+ try {
+        c = koneksi.getConnection();
 
-            String sql = "UPDATE siswa SET nisn=?, nis=?, nama=?, id_kelas=?,alamat=?,no_telp=?,id_spp=?";
+        String selectedIdKelas = (String) idkelas.getSelectedItem();
+        String selectedIdSpp = (String) idspp.getSelectedItem();
+
+        try {
+            int idKelas = Integer.parseInt(selectedIdKelas);
+            int idSpp = Integer.parseInt(selectedIdSpp);
+
+            String sql = "UPDATE siswa SET nis=?, nama=?, id_kelas=?, alamat=?, no_telp=?, id_spp=? WHERE nisn=?";
             PreparedStatement st = c.prepareStatement(sql);
-            st.setString(1, Nnisn.getText());
-            st.setString(2, Nnis.getText());
-            st.setString(3, Nnama.getText());
-            st.setString(4, (String) idkelas.getSelectedItem());
-            st.setString(5, alamat.getText());
-            st.setString(6, notelp.getText());
-            st.setString(7, (String) idspp.getSelectedItem());
+            st.setString(1, Nnis.getText()); // Update nis
+            st.setString(2, Nnama.getText()); // Update nama
+            st.setInt(3, idKelas); // Update id_kelas as an integer
+            st.setString(4, alamat.getText()); // Update alamat
+            st.setString(5, notelp.getText()); // Update no_telp
+            st.setInt(6, idSpp); // Update id_spp as an integer
+            st.setString(7, Nnisn.getText()); // Update based on nisn
+
             st.executeUpdate();
             JOptionPane.showMessageDialog(null, "Data berhasil diubah", "Pesan", JOptionPane.INFORMATION_MESSAGE);
             tampildata();
-        }catch(SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid id_kelas or id_spp value. Please select a valid integer.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void notelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_notelpActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_notelpActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        // Konfirmasi penghapusan
-        int confirm = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin menghapus data tersebut?", "Konfirmasi", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-        if (confirm == 0) {
-            Connection conn = koneksi.getConnection();
-
-            // Ambil nilai nisn dari kolom terpilih di tabel
-            int selectedRow = table.getSelectedRow();
-            if (selectedRow == -1) {
-                JOptionPane.showMessageDialog(this, "Pilih data yang akan dihapus.");
-                return;
-            }
-            String nisn = (String) tbl.getValueAt(selectedRow, 0);
-
-            try {
-                String query = "DELETE FROM siswa WHERE nisn=?";
-                PreparedStatement stmt = conn.prepareStatement(query);
-                stmt.setString(1, nisn);
-                int rowsDeleted = stmt.executeUpdate();
-
-                if (rowsDeleted > 0) {
-                    JOptionPane.showMessageDialog(null, "Data berhasil dihapus", "Pesan", JOptionPane.INFORMATION_MESSAGE);
-                    tampildata();
-                    Nnisn.setText("");
-                    Nnis.setText("");
-                    Nnama.setText("");
-                    idkelas.setSelectedItem("");
-                    alamat.setText("");
-                    notelp.setText("");
-                    idspp.setSelectedItem("");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Data gagal dihapus", "Pesan", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Data gagal dihapus: " + e.getMessage(), "Pesan", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        try {
+        c = koneksi.getConnection();
+        String sql = "DELETE FROM siswa WHERE nisn=?";
+        PreparedStatement st = c.prepareStatement(sql);
+        st.setString(1, Nnisn.getText()); // Delete based on nisn
+        st.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Data berhasil dihapus", "Pesan", JOptionPane.INFORMATION_MESSAGE);
+        tampildata(); // Refresh the table
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    }
+    }//GEN-LAST:event_deleteActionPerformed
 
     private void tableMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseEntered
         // TODO add your handling code here:
@@ -453,11 +436,11 @@ private String selectedIdTransaksi;
     private javax.swing.JTextField Nnis;
     private javax.swing.JTextField Nnisn;
     private javax.swing.JTextField alamat;
+    private javax.swing.JButton delete;
     private javax.swing.JComboBox<String> idkelas;
     private javax.swing.JComboBox<String> idspp;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

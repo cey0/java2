@@ -9,6 +9,14 @@ import dashoard.admin;
 import javax.swing.JOptionPane;
 import dashoard.petugas;
 import role.util;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  *
@@ -146,6 +154,33 @@ public class viewAdmin extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        util role = util.getInstance();
+        String user = role.getRole();
+        if (user.equals("admin")) {
+           try {
+        Document document = new Document(PageSize.A4);
+
+        PdfWriter.getInstance(document, new FileOutputStream("history_pembayaran.pdf"));
+        document.open();
+
+        // Menambahkan judul laporan
+        document.add(new Paragraph("Laporan History Pembayaran"));
+
+        // Mendapatkan data dari tabel (misalnya jTable1)
+        for (int row = 0; row < jTable1.getRowCount(); row++) {
+            for (int col = 0; col < jTable1.getColumnCount(); col++) {
+                document.add(new Paragraph(jTable1.getValueAt(row, col).toString()));
+            }
+        }
+
+        document.close();
+    } catch (DocumentException | IOException e) {
+        e.printStackTrace();
+    }
+    } else {
+    // Handle peran lainnya atau tampilkan pesan kesalahan
+        JOptionPane.showMessageDialog(this, "Anda tidak memiliki izin untuk melihat ini.");
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
