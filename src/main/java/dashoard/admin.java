@@ -6,6 +6,7 @@ package dashoard;
 import login.login;
 import procces.viewAdmin;
 import CRUD.pilihcrud;
+import procces.entri;
 
 /**
  *
@@ -129,6 +130,9 @@ public class admin extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        entri et = new entri();
+        et.show();
+        this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed

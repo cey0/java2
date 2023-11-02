@@ -4,6 +4,7 @@
  */
 package CRUD;
 import view.*;
+import dashoard.admin;
 
 /**
  *
@@ -82,8 +83,13 @@ public class pilihcrud extends javax.swing.JFrame {
         jButton8.setBounds(310, 90, 120, 110);
 
         jButton1.setText("dashboard");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton1);
-        jButton1.setBounds(10, 0, 93, 23);
+        jButton1.setBounds(10, 0, 86, 22);
 
         setBounds(0, 0, 603, 249);
     }// </editor-fold>//GEN-END:initComponents
@@ -112,6 +118,13 @@ public class pilihcrud extends javax.swing.JFrame {
         cs.show();
         this.dispose();
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        admin ad = new admin();
+        ad.show();
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -14,14 +14,23 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.List;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import javax.swing.JFormattedTextField;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -32,9 +41,105 @@ public class viewAdmin extends javax.swing.JFrame {
     /**
      * Creates new form viewAdmin
      */
+     Connection c;
+    Statement st;
+    String sql;
+    ResultSet rs;
+    private DefaultTableModel tbl;
     public viewAdmin() {
         initComponents();
+        comboboxkelas();
+        comboboxdate();
+        this.tampildata();
+        
+        
     }
+     public void tampildata(){
+         int no = 1;
+    tbl = new DefaultTableModel();
+    tbl.addColumn("id_pembayaran");
+    tbl.addColumn("id_user");
+    tbl.addColumn("nisn");
+    tbl.addColumn("tgl_bayar");
+    tbl.addColumn("bulan_bayar");
+    tbl.addColumn("tahun_bayar");
+    tbl.addColumn("id_spp");
+    tbl.addColumn("jumlah_bayar");
+    
+    table.setModel(tbl); // Set the table model here
+
+    c = koneksi.getConnection();
+    try {
+        st = c.createStatement();
+        sql = "SELECT * FROM pembayaran";
+        rs = st.executeQuery(sql);
+
+        while (rs.next()) {
+            tbl.addRow(new Object[]{
+                rs.getInt("id_pembayaran"),
+                rs.getInt("id_user"),
+                rs.getString("nisn"),
+                rs.getString("tgl_bayar"),
+                rs.getString("bulan_bayar"),
+                rs.getString("tahun_dibayar"),
+                rs.getInt("id_spp"),
+                rs.getInt("jumlah_bayar")
+            });
+        }
+        
+        tbl.fireTableDataChanged(); // Refresh the table display
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    }
+    public void comboboxkelas() {
+   
+    try {
+        c = koneksi.getConnection();
+        st = c.createStatement();
+        sql = "SELECT nisn FROM siswa"; // Change this query to fetch data from your database table
+        rs = st.executeQuery(sql);
+
+        while (rs.next()) {
+            idkelas.addItem(rs.getString("nisn")); // Add each item to the combo box
+        }
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    }
+    }
+    public void comboboxdate() {
+   
+    try {
+        c = koneksi.getConnection();
+        st = c.createStatement();
+        sql = "SELECT 	tgl_bayar FROM pembayaran"; // Change this query to fetch data from your database table
+        rs = st.executeQuery(sql);
+
+        while (rs.next()) {
+            date.addItem(rs.getString("tgl_bayar")); // Add each item to the combo box
+        }
+    } catch (SQLException e) {
+        System.out.println(e.getMessage());
+    }
+    }
+    public void filter(String selectedKelas) {
+    DefaultTableModel model = (DefaultTableModel) table.getModel();
+    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+    table.setRowSorter(sorter);
+
+    RowFilter<DefaultTableModel, Object> rowFilter = RowFilter.regexFilter(selectedKelas, 2); // 2 adalah indeks kolom kelas
+    sorter.setRowFilter(rowFilter);
+}
+    public void filterDate(String selectedDate) {
+    DefaultTableModel model = (DefaultTableModel) table.getModel();
+    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+    table.setRowSorter(sorter);
+
+    RowFilter<DefaultTableModel, Object> rowFilter = RowFilter.regexFilter(selectedDate, 3); // 3 adalah indeks kolom tanggal
+    sorter.setRowFilter(rowFilter);
+}
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,23 +151,52 @@ public class viewAdmin extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        date = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        idkelas = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(null);
 
         jLabel1.setText("view");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(353, 0, 27, 17);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jLabel2.setText("nisn");
+
+        jButton1.setText("generate laporan");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("dashboard");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        date.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "pilih"}));
+        date.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dateActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("tanggal");
+
+        idkelas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "pilih"}));
+        idkelas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idkelasActionPerformed(evt);
+            }
+        });
+
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -74,55 +208,69 @@ public class viewAdmin extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
 
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(10, 130, 790, 402);
-
-        jLabel2.setText("kelas");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(261, 55, 31, 17);
-
-        jButton1.setText("generate laporan");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(550, 40, 133, 66);
-
-        jButton2.setText("dashboard");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton2);
-        jButton2.setBounds(14, 23, 93, 23);
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
-        getContentPane().add(jComboBox3);
-        jComboBox3.setBounds(323, 52, 72, 23);
-
-        jLabel3.setText("tanggal");
-        getContentPane().add(jLabel3);
-        jLabel3.setBounds(250, 99, 42, 17);
-
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jTextField1);
-        jTextField1.setBounds(323, 96, 72, 23);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(353, 353, 353)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(jButton2)
+                        .addGap(150, 150, 150)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(11, 11, 11)
+                                .addComponent(jLabel2))
+                            .addComponent(jLabel3))
+                        .addGap(33, 33, 33)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(idkelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(155, 155, 155)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(142, 142, 142))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addGap(7, 7, 7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabel2)
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(idkelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(89, 89, 89)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -148,48 +296,52 @@ public class viewAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        util role = util.getInstance();
+         util role = util.getInstance();
+    if (role != null) {
         String user = role.getRole();
         if (user.equals("admin")) {
            try {
-        Document document = new Document(PageSize.A4);
+                Document document = new Document(PageSize.A4);
 
-        PdfWriter.getInstance(document, new FileOutputStream("history_pembayaran.pdf"));
-        document.open();
+                PdfWriter.getInstance(document, new FileOutputStream("history_pembayaran.pdf"));
+                document.open();
 
-        // Menambahkan judul laporan
-        document.add(new Paragraph("Laporan History Pembayaran"));
+                // Add the report title
+                document.add(new Paragraph("Laporan History Pembayaran"));
 
-        // Mendapatkan data dari tabel (misalnya jTable1)
-        for (int row = 0; row < jTable1.getRowCount(); row++) {
-            for (int col = 0; col < jTable1.getColumnCount(); col++) {
-                document.add(new Paragraph(jTable1.getValueAt(row, col).toString()));
+                // Retrieve data from the table (e.g., jTable1)
+                for (int row = 0; row < table.getRowCount(); row++) {
+                    for (int col = 0; col < table.getColumnCount(); col++) {
+                        document.add(new Paragraph(table.getValueAt(row, col).toString()));
+                    }
+                }
+
+                document.close();
+            } catch (DocumentException | IOException e) {
+                e.printStackTrace();
             }
+        } else {
+            // Handle other roles or display an error message
+            JOptionPane.showMessageDialog(this, "Anda tidak memiliki izin untuk melihat ini.");
         }
-
-        document.close();
-    } catch (DocumentException | IOException e) {
-        e.printStackTrace();
-    }
     } else {
-    // Handle peran lainnya atau tampilkan pesan kesalahan
-        JOptionPane.showMessageDialog(this, "Anda tidak memiliki izin untuk melihat ini.");
+        // Handle the case where 'role' is null
+        JOptionPane.showMessageDialog(this, "Role information is not available.");
     }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void idkelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idkelasActionPerformed
         // TODO add your handling code here:
-        try {
-            MaskFormatter mask = new MaskFormatter("##/##/####");
-            JFormattedTextField dateField = new JFormattedTextField(mask);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            dateField.setFormatterFactory(new DefaultFormatterFactory(new DateFormatter(dateFormat)));
-            // Anda bisa menambahkan text field ke panel atau frame Anda di sini.
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_jTextField1ActionPerformed
+        String selectedKelas = idkelas.getSelectedItem().toString();
+    filter(selectedKelas);
+        
+    }//GEN-LAST:event_idkelasActionPerformed
+
+    private void dateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateActionPerformed
+        // TODO add your handling code here:
+        String selectedDate = date.getSelectedItem().toString();
+    filterDate(selectedDate);
+    }//GEN-LAST:event_dateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -227,14 +379,14 @@ public class viewAdmin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> date;
+    private javax.swing.JComboBox<String> idkelas;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }
