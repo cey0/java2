@@ -11,6 +11,7 @@ dashoard\petugas$3.class
 role\util.class
 procces\viewAdmin$4.class
 view\crudpetugas$1.class
+edit\editpetugas$7.class
 CRUD\pilihcrud$4.class
 view\crudspp$3.class
 edit\editpetugas$4.class
@@ -20,6 +21,7 @@ view\crudkelas$5.class
 create\createspp$3.class
 edit\editsiswa$5.class
 view\crudsiswa$5.class
+procces\entri$9.class
 edit\editspp$5.class
 edit\editsiswa$2.class
 create\createsiswa$3.class
@@ -56,6 +58,7 @@ dashoard\siswa$2.class
 dashoard\admin$5.class
 edit\editsiswa$7.class
 login\login$4.class
+procces\entri$10.class
 procces\entri$2.class
 create\createpetugas$2.class
 create\createsiswa$1.class
@@ -72,7 +75,6 @@ view\crudkelas.class
 create\createsiswa$8.class
 procces\entri$8.class
 edit\editspp$3.class
-siswa\viewSiswa.class
 create\createsiswa$7.class
 create\createspp$4.class
 procces\entri.class
@@ -101,18 +103,19 @@ view\crudspp$1.class
 edit\editsiswa.class
 edit\editspp$1.class
 edit\editkelas$2.class
+edit\editpetugas$6.class
 edit\editsiswa$9.class
 view\crudpetugas$2.class
 create\createkelas$3.class
 dashoard\petugas$2.class
 edit\editpetugas$3.class
-siswa\viewSiswa$1.class
 CRUD\pilihcrud$3.class
 create\createspp$2.class
 CRUD\pilihcrud$2.class
 create\createsiswa$5.class
 edit\editpetugas$5.class
 view\crudpetugas.class
+create\createpetugas$5.class
 view\crudspp$5.class
 procces\entri$4.class
 edit\editspp$7.class

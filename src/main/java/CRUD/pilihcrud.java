@@ -47,7 +47,7 @@ public class pilihcrud extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton5);
-        jButton5.setBounds(460, 90, 120, 110);
+        jButton5.setBounds(470, 90, 120, 110);
 
         jButton6.setBackground(new java.awt.Color(0, 0, 255));
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
@@ -96,6 +96,9 @@ public class pilihcrud extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
+        crudpetugas cq = new crudpetugas();
+        cq.show();
+        this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed

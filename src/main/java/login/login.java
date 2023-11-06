@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import koneksi.koneksi;
 import role.util;
 
+
 /**
  *
  * @author admin
@@ -57,13 +58,10 @@ public class login extends javax.swing.JFrame {
             // Show a JOptionPane with "Login berhasil" message
             JOptionPane.showMessageDialog(null, "Login berhasil");
         } else {
-            sql = "SELECT * FROM siswa WHERE nisn = '" + username.getText() + "' AND nis = '" + pass.getText() + "'";
-            rs = st.executeQuery(sql);
-            if(rs.next()){
-                siswa sw = new siswa();
-                sw.show();
-                this.dispose();
-            }
+          sql = "SELECT nisn FROM siswa WHERE nisn = '" + username.getText() + "' AND nis = '" + pass.getText() + "'";
+          rs = st.executeQuery(sql);
+
+            
         }
     } catch (SQLException e) {
         JOptionPane.showMessageDialog(null, e);

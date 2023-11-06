@@ -3,6 +3,7 @@ package role;
 public class util {
     private static util instance;
     private String role;
+    private String nisn;
 
     private util() {
         // Private konstruktor untuk mencegah instansiasi langsung.
@@ -21,5 +22,14 @@ public class util {
 
     public void setRole(String role) {
         this.role = role;
+    }
+    // Tambahkan metode untuk mengambil NISN
+    public String getNisn() {
+        return nisn;
+    }
+
+    // Tambahkan metode untuk mengatur NISN
+    public void setNisn(String nisn) {
+        this.nisn = nisn;
     }
 }

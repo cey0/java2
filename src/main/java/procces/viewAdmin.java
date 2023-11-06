@@ -279,6 +279,7 @@ public class viewAdmin extends javax.swing.JFrame {
         // TODO add your handling code here:
         util role = util.getInstance();
         String user = role.getRole();
+        
         if (user.equals("admin")) {
             admin fo = new admin();
             fo.show();
