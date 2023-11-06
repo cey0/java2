@@ -33,6 +33,7 @@ public class editsiswa extends javax.swing.JFrame {
             this.tampildata();
             this.combokelas(); // Corrected method name
             this.combospp();   // Corrected method name
+            
 }
     public void tampildata(){
         int no = 1;
@@ -97,8 +98,9 @@ public class editsiswa extends javax.swing.JFrame {
     } catch (SQLException e) {
         System.out.println(e.getMessage());
     }
+    
 }
-
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
