@@ -297,37 +297,45 @@ public class viewAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         util role = util.getInstance();
-    if (role != null) {
-        String user = role.getRole();
-        if (user.equals("admin")) {
-           try {
-                Document document = new Document(PageSize.A4);
+        // Check the user's role
+    util role = util.getInstance();
+    String userRole = role.getRole();
 
-                PdfWriter.getInstance(document, new FileOutputStream("history_pembayaran.pdf"));
-                document.open();
+    // Only allow admin to generate the report
+    if ("admin".equals(userRole)) {
+        try {
+            // Define the output file name
+            String outputFile = "laporan_pembayaran.pdf";
 
-                // Add the report title
-                document.add(new Paragraph("Laporan History Pembayaran"));
+            // Create a Document for the PDF
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(outputFile));
+            document.open();
 
-                // Retrieve data from the table (e.g., jTable1)
-                for (int row = 0; row < table.getRowCount(); row++) {
-                    for (int col = 0; col < table.getColumnCount(); col++) {
-                        document.add(new Paragraph(table.getValueAt(row, col).toString()));
-                    }
+            // Add a title to the PDF
+            document.add(new Paragraph("Laporan Pembayaran"));
+
+            // Add data from the table to the PDF
+            int rowCount = table.getRowCount();
+            int colCount = table.getColumnCount();
+
+            for (int i = 0; i < rowCount; i++) {
+                StringBuilder rowText = new StringBuilder();
+                for (int j = 0; j < colCount; j++) {
+                    Object cellValue = table.getValueAt(i, j);
+                    rowText.append(cellValue).append("\t");
                 }
-
-                document.close();
-            } catch (DocumentException | IOException e) {
-                e.printStackTrace();
+                document.add(new Paragraph(rowText.toString()));
             }
-        } else {
-            // Handle other roles or display an error message
-            JOptionPane.showMessageDialog(this, "Anda tidak memiliki izin untuk melihat ini.");
+
+            document.close();
+
+            JOptionPane.showMessageDialog(this, "Laporan telah berhasil dibuat: " + outputFile);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat membuat laporan: " + e.getMessage());
         }
     } else {
-        // Handle the case where 'role' is null
-        JOptionPane.showMessageDialog(this, "Role information is not available.");
+        JOptionPane.showMessageDialog(this, "Anda tidak memiliki izin untuk generate laporan.");
     }
     }//GEN-LAST:event_jButton1ActionPerformed
 

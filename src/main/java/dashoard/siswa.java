@@ -4,7 +4,18 @@
  */
 package dashoard;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import koneksi.koneksi;
 import login.login;
+import role.util;
 
 /**
  *
@@ -15,9 +26,66 @@ public class siswa extends javax.swing.JFrame {
     /**
      * Creates new form siswa
      */
+    Connection c;
+    Statement st;
+    String sql;
+    ResultSet rs;
+    private DefaultTableModel tbl;
     public siswa() {
         initComponents();
+        tampildata();
     }
+    public void tampildata() {
+        int no = 1;
+        tbl = new DefaultTableModel();
+        tbl.addColumn("id_pembayaran");
+        tbl.addColumn("id_user");
+        tbl.addColumn("nisn");
+        tbl.addColumn("tgl_bayar");
+        tbl.addColumn("bulan_bayar");
+        tbl.addColumn("tahun_dibayar");
+        tbl.addColumn("id_spp");
+        tbl.addColumn("jumlah_bayar");
+        table.setModel(tbl);
+        c = koneksi.getConnection();
+        try{
+            c = koneksi.getConnection();
+             st = c.createStatement();
+             sql = "SELECT * FROM pembayaran";
+             rs = st.executeQuery(sql);
+             
+             while(rs.next()){
+             tbl.addRow(new Object[]{
+                rs.getInt("id_pembayaran"),
+                rs.getInt("id_user"),
+                rs.getString("nisn"),
+                rs.getString("tgl_bayar"),
+                rs.getString("bulan_bayar"),
+                rs.getString("tahun_dibayar"),
+                rs.getInt("id_spp"),
+                rs.getInt("jumlah_bayar"),
+                
+                
+             
+             });
+             }
+            
+        }catch(SQLException e){
+             System.out.println(e.getMessage());
+            
+        }
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        table.setRowSorter(sorter);
+
+        // Get the NISN value from the util class
+        util nisn = util.getInstance();
+        String setNisn = nisn.getNisn();
+
+        // Set a filter based on the "nisn" column and the loggedInNISN value
+        sorter.setRowFilter(RowFilter.regexFilter(setNisn, 2)); // Adjust the column index as needed
+    }
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,13 +97,16 @@ public class siswa extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
+        back = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -49,11 +120,8 @@ public class siswa extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1000, 1000));
         getContentPane().setLayout(null);
-
-        jLabel1.setText("siswa");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(690, 73, 34, 17);
 
         jPanel2.setBackground(new java.awt.Color(51, 102, 255));
         jPanel2.setLayout(null);
@@ -84,15 +152,57 @@ public class siswa extends javax.swing.JFrame {
         getContentPane().add(jPanel2);
         jPanel2.setBounds(0, 0, 0, 460);
 
+        jLabel6.setText("siswa");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(450, 10, 34, 17);
+
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "id_pembayaran", "id_user", "nisn", "tgl_bayar", "bulan_bayar", "tahun_bayar", "id_spp", "jumlah_bayar"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(table);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(0, 50, 790, 402);
+
+        back.setText("<");
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+        getContentPane().add(back);
+        back.setBounds(10, 20, 23, 23);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        // TODO add your handling code here:
         login lg = new login();
         lg.show();
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_backActionPerformed
 
     /**
      * @param args the command line arguments
@@ -130,13 +240,16 @@ public class siswa extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

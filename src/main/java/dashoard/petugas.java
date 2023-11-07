@@ -5,7 +5,7 @@
 
 package dashoard;
 import login.login;
-
+import procces.entri;
 import procces.viewAdmin;
 
 /**
@@ -136,6 +136,9 @@ public class petugas extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        entri en = new entri();
+        en.show();
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

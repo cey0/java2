@@ -55,12 +55,21 @@ public class login extends javax.swing.JFrame {
                 this.dispose();
             }
             
+
+            
             // Show a JOptionPane with "Login berhasil" message
             JOptionPane.showMessageDialog(null, "Login berhasil");
         } else {
           sql = "SELECT nisn FROM siswa WHERE nisn = '" + username.getText() + "' AND nis = '" + pass.getText() + "'";
           rs = st.executeQuery(sql);
-
+          if (rs.next()){
+          util nisn = util.getInstance();
+            nisn.setNisn(rs.getString("nisn"));
+            siswa sw = new siswa();
+            sw.show();
+            this.dispose();
+          
+          }
             
         }
     } catch (SQLException e) {
