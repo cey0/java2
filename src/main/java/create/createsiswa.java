@@ -33,6 +33,7 @@ public class createsiswa extends javax.swing.JFrame {
             this.tampildata();
             this.combokelas(); // Corrected method name
             this.combospp();   // Corrected method name
+            this.comboiduser();
 }
     public void tampildata() {
     int no = 1;
@@ -112,6 +113,22 @@ public class createsiswa extends javax.swing.JFrame {
         System.out.println(e.getMessage());
     }
 }
+    public void comboiduser(){
+        iduser.removeAllItems();
+        try{
+            c = koneksi.getConnection();
+            st = c.createStatement();
+            sql = "SELECT id_user FROM user";
+            rs = st.executeQuery(sql);
+            
+            while (rs.next()){
+                iduser.addItem(rs.getString("id_user"));
+            }
+            
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+    }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -141,6 +158,8 @@ public class createsiswa extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         alamat = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        iduser = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -222,50 +241,59 @@ public class createsiswa extends javax.swing.JFrame {
             }
         });
 
+        jLabel8.setText("id_user");
+
+        iduser.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        iduser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                iduserActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGap(43, 43, 43)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Nnis, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Nnisn, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2))
-                                .addGap(43, 43, 43)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(Nnis, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(Nnisn, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel7))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(notelp, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-                                    .addComponent(Nnama)
-                                    .addComponent(idkelas, 0, 93, Short.MAX_VALUE)
-                                    .addComponent(idspp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(alamat))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButton2)
-                                .addGap(35, 35, 35)
-                                .addComponent(jButton1)
-                                .addGap(20, 20, 20))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())))))
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(notelp, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+                            .addComponent(Nnama)
+                            .addComponent(idkelas, 0, 93, Short.MAX_VALUE)
+                            .addComponent(idspp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(alamat)
+                            .addComponent(iduser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addGap(35, 35, 35)
+                        .addComponent(jButton1)
+                        .addGap(20, 20, 20))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -309,7 +337,11 @@ public class createsiswa extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(idspp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6)))
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(iduser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15))
         );
@@ -321,15 +353,16 @@ public class createsiswa extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
        c = koneksi.getConnection();
-String sql = "INSERT INTO siswa (nisn, nis, nama, id_kelas, alamat, no_telp, id_spp) VALUES (?, ?, ?, ?, ?, ?, ?)";
+String sql = "INSERT INTO siswa (id_user,nisn, nis, nama, id_kelas, alamat, no_telp, id_spp) VALUES (?,?, ?, ?, ?, ?, ?, ?)";
 PreparedStatement st = c.prepareStatement(sql);
-st.setString(1, Nnisn.getText()); // Use Nnisn here
-st.setString(2, Nnis.getText()); // Use Nnis here
-st.setString(3, Nnama.getText()); // Use Nnama here
-st.setInt(4, Integer.parseInt(idkelas.getSelectedItem().toString()));
-st.setString(5, alamat.getText());
-st.setString(6, notelp.getText()); // Use notelp here
-st.setInt(7, Integer.parseInt(idspp.getSelectedItem().toString()));
+st.setInt(1, Integer.parseInt(iduser.getSelectedItem().toString())); // Use Nnisn here
+st.setString(2, Nnisn.getText()); // Use Nnisn here
+st.setString(3, Nnis.getText()); // Use Nnis here
+st.setString(4, Nnama.getText()); // Use Nnama here
+st.setInt(5, Integer.parseInt(idkelas.getSelectedItem().toString()));
+st.setString(6, alamat.getText());
+st.setString(7, notelp.getText()); // Use notelp here
+st.setInt(8, Integer.parseInt(idspp.getSelectedItem().toString()));
 
 int rowsInserted = st.executeUpdate();
 
@@ -371,6 +404,10 @@ if (rowsInserted > 0) {
         es.show();
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void iduserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iduserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_iduserActionPerformed
 
     /**
      * @param args the command line arguments
@@ -417,6 +454,7 @@ if (rowsInserted > 0) {
     private javax.swing.JTextField alamat;
     private javax.swing.JComboBox<String> idkelas;
     private javax.swing.JComboBox<String> idspp;
+    private javax.swing.JComboBox<String> iduser;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -427,6 +465,7 @@ if (rowsInserted > 0) {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField notelp;
     private javax.swing.JTable table;

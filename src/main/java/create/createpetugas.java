@@ -32,7 +32,7 @@ public class createpetugas extends javax.swing.JFrame {
     public createpetugas() {
         initComponents();
         tampildata();
-        combobox1();
+        
     }
      public void tampildata(){
         int no = 1;
@@ -67,13 +67,7 @@ public class createpetugas extends javax.swing.JFrame {
             
         }
     }
-      public void combobox1() {
-        role.removeAllItems(); // Hapus semua item yang mungkin ada sebelumnya
-
-        // Tambahkan nilai-nilai 'admin' dan 'petugas' ke JComboBox
-        role.addItem("admin");
-        role.addItem("petugas");
-    }
+      
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -145,7 +139,7 @@ public class createpetugas extends javax.swing.JFrame {
 
         jLabel5.setText("role");
 
-        role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "petugas", "siswa" }));
 
         jLabel6.setText("data petugas");
 
@@ -183,7 +177,6 @@ public class createpetugas extends javax.swing.JFrame {
                 .addGap(102, 102, 102)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20))
                     .addGroup(layout.createSequentialGroup()

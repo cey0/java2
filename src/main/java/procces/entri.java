@@ -13,16 +13,24 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.DateFormatter;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.MaskFormatter;
 import koneksi.koneksi;
 import role.util;
 import dashoard.admin;
 import dashoard.petugas;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 /**
  *
  * @author nadra
@@ -43,7 +51,83 @@ public class entri extends javax.swing.JFrame {
         combopetugas();
         combonisn();
         combospp();
+        
+        
     }
+   
+
+        // Close the result set and handle exceptions
+
+   
+
+//    private void populateMonthComboBox(String nisn) {
+//    month.removeAllItems(); // Bersihkan item-item yang ada pada combo box bulan
+//    List<String> allMonths = Arrays.asList("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");
+//
+//    try {
+//        c = koneksi.getConnection();
+//        st = c.createStatement();
+//        sql = "SELECT bulan_bayar FROM pembayaran WHERE nisn = '" + nisn + "'"; // Ambil bulan-bulan yang sudah dibayar oleh NISN tertentu
+//        rs = st.executeQuery(sql);
+//
+//        List<String> paidMonths = new ArrayList<>();
+//        while (rs.next()) {
+//            String[] months = rs.getString("bulan_bayar").split(" dan "); // Misal: "Januari dan Februari"
+//            paidMonths.addAll(Arrays.asList(months));
+//        }
+//
+//        // Hapus bulan-bulan yang sudah dibayar dari list semua bulan
+//        allMonths.removeAll(paidMonths);
+//
+//        // Tambahkan bulan-bulan yang belum dibayar ke combo box bulan
+//        for (String montha : allMonths) {
+//            month.addItem(montha);
+//        }
+//    } catch (SQLException e) {
+//        System.out.println(e.getMessage());
+//    }
+//}
+    private void populateBulanBayarCombo() {
+     String Nisn = (String) nisn.getSelectedItem();
+    String Year = (String) years.getSelectedItem();
+
+    try {
+        java.sql.Statement statement = c.createStatement();
+        String sql = "SELECT DISTINCT bulan_bayar " +
+                     "FROM pembayaran " +
+                     "WHERE nisn = '" + Nisn + "' " +
+                     "AND tahun_dibayar = " + Year;
+
+        java.sql.ResultSet res = statement.executeQuery(sql);
+
+        // Create a HashSet to store the months that have been paid
+        HashSet<String> paidMonths = new HashSet<>();
+        while (res.next()) {
+            String months = res.getString("bulan_bayar");
+            paidMonths.add(months);
+        }
+
+        // Populate the bulanBayar combo box with all months in order
+        month.removeAllItems(); // Clear existing items
+        String[] allMonths = {"januari", "febuari", "maret", "april", "mei", "juni", "juli", "agustus", "september", "oktober", "november", "december"};
+        month.setModel(new DefaultComboBoxModel<>(allMonths));
+
+        // Remove paid months from the list
+        if (!paidMonths.isEmpty()) {
+            for (String paidMonth : paidMonths) {
+                month.removeItem(paidMonth);
+            }
+        }
+
+        // Close the result set
+        res.close();
+
+    } catch (SQLException e) {
+        e.printStackTrace(); // Handle the exception properly
+    }
+}
+
+
     public void tampildata(){
         int no = 1;
         tbl = new DefaultTableModel();
@@ -164,7 +248,7 @@ public class entri extends javax.swing.JFrame {
         nisn = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        years = new javax.swing.JTextField();
+        years1 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         idspp = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
@@ -177,6 +261,8 @@ public class entri extends javax.swing.JFrame {
         date = new com.toedter.calendar.JDateChooser();
         month = new javax.swing.JComboBox<>();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        years = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -194,14 +280,19 @@ public class entri extends javax.swing.JFrame {
         });
 
         nisn.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
+        nisn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nisnActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("bulan");
 
         jLabel5.setText("tahun");
 
-        years.addActionListener(new java.awt.event.ActionListener() {
+        years1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                yearsActionPerformed(evt);
+                years1ActionPerformed(evt);
             }
         });
 
@@ -254,12 +345,31 @@ public class entri extends javax.swing.JFrame {
         data.setRows(5);
         jScrollPane2.setViewportView(data);
 
-        month.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "januari", "febuari", "maret", "april", "may", "juni","juli","agustus","september","oktober","november","desember" }));
+        month.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
+        month.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                monthActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("dashboard");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("cetak pdf");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        years.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2023", "2024"}));
+        years.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                yearsActionPerformed(evt);
             }
         });
 
@@ -269,7 +379,19 @@ public class entri extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(52, 52, 52)
+                                .addComponent(idspp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(years1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(years, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel2)
                         .addComponent(nisn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -286,26 +408,19 @@ public class entri extends javax.swing.JFrame {
                         .addGap(44, 44, 44)
                         .addComponent(month, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jButton1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jLabel7)
-                            .addGap(47, 47, 47)
-                            .addComponent(nominal))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jLabel6)
-                            .addGap(52, 52, 52)
-                            .addComponent(idspp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jLabel5)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(years, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(8, 8, 8)
-                        .addComponent(jButton2)))
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
+                        .addComponent(jButton2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(38, 38, 38)
+                        .addComponent(nominal, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(111, 111, 111)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton3)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -334,6 +449,7 @@ public class entri extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
+                            .addComponent(years1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(years, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -349,15 +465,18 @@ public class entri extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 341, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addGap(0, 312, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void yearsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearsActionPerformed
+    private void years1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_years1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_yearsActionPerformed
+        populateBulanBayarCombo();
+    }//GEN-LAST:event_years1ActionPerformed
 
     private void nominalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nominalActionPerformed
         // TODO add your handling code here:
@@ -372,70 +491,80 @@ try {
     SimpleDateFormat mysqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     String dateStr = mysqlDateFormat.format(tanggal);
     String bulan = month.getSelectedItem().toString();
-    String tahun = years.getText();
+    String tahun = years1.getText();
     String spp = idspp.getSelectedItem().toString();
     String total = nominal.getText();
     
     String gabungB = bulan;
     String gabungN = total;
 
-    String checkgabung = "SELECT * FROM pembayaran WHERE nisn = '" + idnisn + "' AND tgl_bayar = '" + dateStr + "'";
-    rs = st.executeQuery(checkgabung);
+    // Get the current date
+    LocalDate currentDate = LocalDate.now();
 
-    if (rs.next()) {
-        // If a record with the same nisn and date exists
-        String monthValue = rs.getString("bulan_bayar");
-        gabungB = monthValue + " dan " + bulan;
-        String existingTotal = rs.getString("jumlah_bayar");
+    // Convert the selected date to LocalDate
+    LocalDate selectedDate = new java.sql.Date(tanggal.getTime()).toLocalDate();
 
-        // Calculate the new total
-        double newTotal = Double.parseDouble(existingTotal) + Double.parseDouble(total);
-
-        // Update the database with the new bulan_bayar and jumlah_bayar
-        String updateB = "UPDATE pembayaran SET bulan_bayar = '" + gabungB + "', jumlah_bayar = '" + newTotal + "' WHERE nisn = '" + idnisn + "' AND tgl_bayar = '" + dateStr + "'";
-        int benarB = st.executeUpdate(updateB);
-
-        if (benarB > 0) {
-            JOptionPane.showMessageDialog(this, "Data berhasil diupdate");
-        } else {
-            JOptionPane.showMessageDialog(this, "Data tidak berhasil diupdate");
-        }
-        
-        // Update the total in the 'kwitansi' text
-        gabungN = String.valueOf(newTotal);
+    if (!selectedDate.isEqual(currentDate)) {
+        JOptionPane.showMessageDialog(this, "Tanggal bukan hari ini, pembayaran tidak dapat dilakukan.");
     } else {
-        // If no record with the same nisn and date, insert a new one
-        String insert = "INSERT INTO pembayaran (id_user, nisn, tgl_bayar, bulan_bayar, tahun_dibayar, id_spp, jumlah_bayar) " +
-                "VALUES ('" + petugas + "', '" + idnisn + "', '" + dateStr + "', '" + bulan + "', '" + tahun + "', '" + spp + "', '" + total + "')";
-        
-        int benar = st.executeUpdate(insert);
-        if (benar > 0) {
-            JOptionPane.showMessageDialog(this, "Data berhasil ditambah");
+        String checkgabung = "SELECT * FROM pembayaran WHERE nisn = '" + idnisn + "' AND tgl_bayar = '" + dateStr + "'";
+        rs = st.executeQuery(checkgabung);
+
+        if (rs.next()) {
+            // If a record with the same nisn and date exists
+            String monthValue = rs.getString("bulan_bayar");
+            gabungB = monthValue + " dan " + bulan;
+            String existingTotal = rs.getString("jumlah_bayar");
+
+            // Calculate the new total
+            double newTotal = Double.parseDouble(existingTotal) + Double.parseDouble(total);
+
+            // Update the database with the new bulan_bayar and jumlah_bayar
+            String updateB = "UPDATE pembayaran SET bulan_bayar = '" + gabungB + "', jumlah_bayar = '" + newTotal + "' WHERE nisn = '" + idnisn + "' AND tgl_bayar = '" + dateStr + "'";
+            int benarB = st.executeUpdate(updateB);
+
+            if (benarB > 0) {
+                JOptionPane.showMessageDialog(this, "Data berhasil diupdate");
+            } else {
+                JOptionPane.showMessageDialog(this, "Data tidak berhasil diupdate");
+            }
+            
+            // Update the total in the 'kwitansi' text
+            gabungN = String.valueOf(newTotal);
         } else {
-            JOptionPane.showMessageDialog(this, "Data tidak berhasil ditambah");
+            // If no record with the same nisn and date, insert a new one
+            String insert = "INSERT INTO pembayaran (id_user, nisn, tgl_bayar, bulan_bayar, tahun_dibayar, id_spp, jumlah_bayar) " +
+                    "VALUES ('" + petugas + "', '" + idnisn + "', '" + dateStr + "', '" + bulan + "', '" + tahun + "', '" + spp + "', '" + total + "')";
+            
+            int benar = st.executeUpdate(insert);
+            if (benar > 0) {
+                JOptionPane.showMessageDialog(this, "Data berhasil ditambah");
+            } else {
+                JOptionPane.showMessageDialog(this, "Data tidak berhasil ditambah");
+            }
         }
+
+        // Refresh the data in your table
+        tampildata();
+
+        // Prepare the kwitansi text
+        String kwitansi = "Kwitansinya\n\n";
+        kwitansi += "Petugas: " + petugas + "\n";
+        kwitansi += "NISN: " + idnisn + "\n";
+        kwitansi += "Tanggal Bayar: " + dateStr + "\n";
+        kwitansi += "Bulan Bayar: " + gabungB + "\n";
+        kwitansi += "Tahun Bayar: " + tahun + "\n";
+        kwitansi += "ID SPP: " + spp + "\n";
+        kwitansi += "Nominal: " + gabungN + "\n"; // Use the updated 'gabungN' for total
+
+        // Display the updated 'kwitansi' text in the JTextArea
+        data.setText(kwitansi);
     }
-
-    // Refresh the data in your table
-    tampildata();
-
-    // Prepare the kwitansi text
-    String kwitansi = "Kwitansinya\n\n";
-    kwitansi += "Petugas: " + petugas + "\n";
-    kwitansi += "NISN: " + idnisn + "\n";
-    kwitansi += "Tanggal Bayar: " + dateStr + "\n";
-    kwitansi += "Bulan Bayar: " + gabungB + "\n";
-    kwitansi += "Tahun Bayar: " + tahun + "\n";
-    kwitansi += "ID SPP: " + spp + "\n";
-    kwitansi += "Nominal: " + gabungN + "\n"; // Use the updated 'gabungN' for total
-
-    // Display the updated 'kwitansi' text in the JTextArea
-    data.setText(kwitansi);
-
 } catch (Exception ex) {
     ex.printStackTrace();
     JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
-}  
+}
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void iduserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iduserActionPerformed
@@ -444,7 +573,7 @@ try {
 
     private void idsppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idsppActionPerformed
         // TODO add your handling code here:
-        
+  
     }//GEN-LAST:event_idsppActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -467,6 +596,39 @@ try {
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+         Document document = new Document();
+
+    try {
+        PdfWriter.getInstance(document, new FileOutputStream("output.pdf"));
+        document.open();
+
+        // Ambil teks dari JTextArea dan tulis ke file PDF
+        String text = data.getText();
+        document.add(new Paragraph(text));
+
+        JOptionPane.showMessageDialog(this, "PDF berhasil dicetak!");
+    } catch (DocumentException | FileNotFoundException e) {
+        JOptionPane.showMessageDialog(this, "Terjadi kesalahan dalam mencetak PDF: " + e.getMessage());
+    } finally {
+        document.close();
+    }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void monthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monthActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_monthActionPerformed
+
+    private void nisnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nisnActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_nisnActionPerformed
+
+    private void yearsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yearsActionPerformed
+        populateBulanBayarCombo();
+    }//GEN-LAST:event_yearsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -510,6 +672,7 @@ try {
     private javax.swing.JComboBox<String> iduser;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -523,6 +686,7 @@ try {
     private javax.swing.JComboBox<String> nisn;
     private javax.swing.JTextField nominal;
     private javax.swing.JTable table;
-    private javax.swing.JTextField years;
+    private javax.swing.JComboBox<String> years;
+    private javax.swing.JTextField years1;
     // End of variables declaration//GEN-END:variables
 }

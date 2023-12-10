@@ -31,6 +31,18 @@ import javax.swing.JFormattedTextField;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  *
@@ -251,21 +263,21 @@ public class viewAdmin extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(7, 7, 7)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
+                        .addGap(7, 7, 7)
+                        .addComponent(jButton2)
+                        .addGap(9, 9, 9)
                         .addComponent(jLabel2)
                         .addGap(25, 25, 25)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
+                        .addGap(36, 36, 36)
                         .addComponent(idkelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
+                        .addGap(24, 24, 24)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(89, 89, 89)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -303,38 +315,45 @@ public class viewAdmin extends javax.swing.JFrame {
 
     // Only allow admin to generate the report
     if ("admin".equals(userRole)) {
-        try {
-            // Define the output file name
-            String outputFile = "laporan_pembayaran.pdf";
+    try {
+        // Define the output file name
+        String outputFile = "laporan_pembayaran.pdf";
 
-            // Create a Document for the PDF
-            Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream(outputFile));
-            document.open();
+        // Create a Document for the PDF
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(outputFile));
+        document.open();
 
-            // Add a title to the PDF
-            document.add(new Paragraph("Laporan Pembayaran"));
+        // Add a title to the PDF
+        document.add(new Paragraph("Laporan Pembayaran"));
 
-            // Add data from the table to the PDF
-            int rowCount = table.getRowCount();
-            int colCount = table.getColumnCount();
-
-            for (int i = 0; i < rowCount; i++) {
-                StringBuilder rowText = new StringBuilder();
-                for (int j = 0; j < colCount; j++) {
-                    Object cellValue = table.getValueAt(i, j);
-                    rowText.append(cellValue).append("\t");
-                }
-                document.add(new Paragraph(rowText.toString()));
-            }
-
-            document.close();
-
-            JOptionPane.showMessageDialog(this, "Laporan telah berhasil dibuat: " + outputFile);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat membuat laporan: " + e.getMessage());
+        // Create PDF table with the same columns as the JTable
+        PdfPTable pdfTable = new PdfPTable(table.getColumnCount());
+        
+        // Add headers from JTable to PDF table
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            pdfTable.addCell(new Phrase(table.getColumnName(i)));
         }
-    } else {
+
+        // Add data from the JTable to the PDF table
+        for (int i = 0; i < table.getRowCount(); i++) {
+            for (int j = 0; j < table.getColumnCount(); j++) {
+                Object cellValue = table.getValueAt(i, j);
+                pdfTable.addCell(new Phrase(String.valueOf(cellValue)));
+            }
+        }
+
+        // Add PDF table to the document
+        document.add(pdfTable);
+
+        document.close();
+
+        JOptionPane.showMessageDialog(this, "Laporan telah berhasil dibuat: " + outputFile);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Terjadi kesalahan saat membuat laporan: " + e.getMessage());
+    }
+
+} else {
         JOptionPane.showMessageDialog(this, "Anda tidak memiliki izin untuk generate laporan.");
     }
     }//GEN-LAST:event_jButton1ActionPerformed

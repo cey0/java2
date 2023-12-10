@@ -50,8 +50,9 @@ public class crudpetugas extends javax.swing.JFrame {
              
              while(rs.next()){
              tbl.addRow(new Object[]{
-                rs.getString("id_user"),
+                rs.getInt("id_user"),
                 rs.getString("username"),
+                rs.getString("password"),
                 rs.getString("nama_petugas"),
                 rs.getString("role"),
                 
@@ -64,6 +65,7 @@ public class crudpetugas extends javax.swing.JFrame {
             
         }
     }
+      
 
     /**
      * This method is called from within the constructor to initialize the form.
