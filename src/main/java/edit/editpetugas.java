@@ -92,7 +92,10 @@ public class editpetugas extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
+<<<<<<< Updated upstream
         role = new javax.swing.JComboBox<>();
+=======
+>>>>>>> Stashed changes
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -153,6 +156,7 @@ public class editpetugas extends javax.swing.JFrame {
             }
         });
 
+<<<<<<< Updated upstream
         role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "petugas", "siswa" }));
         role.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -160,6 +164,8 @@ public class editpetugas extends javax.swing.JFrame {
             }
         });
 
+=======
+>>>>>>> Stashed changes
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -167,11 +173,17 @@ public class editpetugas extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
+<<<<<<< Updated upstream
                     .addComponent(jLabel5))
                 .addGap(21, 21, 21)
+=======
+                    .addComponent(jLabel5)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)))
+>>>>>>> Stashed changes
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -201,10 +213,17 @@ public class editpetugas extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+<<<<<<< Updated upstream
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+=======
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jButton4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+>>>>>>> Stashed changes
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(user, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -304,6 +323,7 @@ private int setSelectedItem;
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+<<<<<<< Updated upstream
         pilihcrud am = new pilihcrud();
         am.show();
         this.dispose();
@@ -313,6 +333,13 @@ private int setSelectedItem;
         // TODO add your handling code here:
     }//GEN-LAST:event_roleActionPerformed
 
+=======
+        editpetugas cs = new editpetugas();
+        cs.show();
+        this.dispose();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+>>>>>>> Stashed changes
     /**
      * @param args the command line arguments
      */

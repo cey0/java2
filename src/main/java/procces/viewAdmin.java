@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package procces;
+<<<<<<< Updated upstream
 import koneksi.koneksi;
 import login.login;
 import dashoard.admin;
@@ -43,15 +44,17 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+=======
+>>>>>>> Stashed changes
 
 /**
  *
- * @author nadra
+ * @author admin
  */
 public class viewAdmin extends javax.swing.JFrame {
 
     /**
-     * Creates new form viewAdmin
+     * Creates new form NewJFrame
      */
      Connection c;
     Statement st;
@@ -162,6 +165,7 @@ public class viewAdmin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+<<<<<<< Updated upstream
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -229,10 +233,15 @@ public class viewAdmin extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(table);
 
+=======
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+>>>>>>> Stashed changes
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+<<<<<<< Updated upstream
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -282,11 +291,19 @@ public class viewAdmin extends javax.swing.JFrame {
                 .addGap(89, 89, 89)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+=======
+            .addGap(0, 468, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 315, Short.MAX_VALUE)
+>>>>>>> Stashed changes
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+<<<<<<< Updated upstream
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         util role = util.getInstance();
@@ -371,6 +388,8 @@ public class viewAdmin extends javax.swing.JFrame {
     filterDate(selectedDate);
     }//GEN-LAST:event_dateActionPerformed
 
+=======
+>>>>>>> Stashed changes
     /**
      * @param args the command line arguments
      */
@@ -397,6 +416,7 @@ public class viewAdmin extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(viewAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -407,6 +427,7 @@ public class viewAdmin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+<<<<<<< Updated upstream
     private javax.swing.JComboBox<String> date;
     private javax.swing.JComboBox<String> idkelas;
     private javax.swing.JButton jButton1;
@@ -416,5 +437,7 @@ public class viewAdmin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
+=======
+>>>>>>> Stashed changes
     // End of variables declaration//GEN-END:variables
 }
